@@ -153,6 +153,16 @@ namespace ReadFile1 {
 				workcells = samRange->MergeArea;
 				workcells = (Microsoft::Office::Interop::Excel::Range^)workcells->Cells[workcells->Rows->Count, 1];
 				MessageBox::Show("ワークセル最終行です:" + workcells->Row);
+				workcells = (Microsoft::Office::Interop::Excel::Range^)workcells->Cells[workcells->Rows->Count+1, 1];
+				MessageBox::Show("ワークセル最終行の一つ下です:" + workcells->Row+":"+workcells->Text->ToString());
+				if (workcells->Text->ToString()->Contains("X")) {
+					MessageBox::Show("このセルはパッド座標の中心座標のx座標です");
+					workcells= (Microsoft::Office::Interop::Excel::Range^)workcells->Cells->Next;
+					if (workcells->Text->ToString()->Contains("Y")) {
+						MessageBox::Show("このセルはパッド座標の中心座標のy座標です");
+					}
+				}
+
 				//隣のセルにrangeを移す
 				workcells = (Microsoft::Office::Interop::Excel::Range^)worksheet->Cells[samRange->Row, samRange->Column+1];
 				//該当セルが結合セルかどうかの判定
