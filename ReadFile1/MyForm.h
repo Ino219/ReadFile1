@@ -172,6 +172,7 @@ namespace ReadFile1 {
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(worksheet);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(workbook);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(app_);
+
 			}
 		}
 		
