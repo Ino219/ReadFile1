@@ -135,9 +135,10 @@ namespace ReadFile1 {
 				workcells = (Microsoft::Office::Interop::Excel::Range^)worksheet->Cells[1, 1];
 				//検索するワード
 				String^ key = "sample";
+				String^ pad = "パッド中心座標(原点中心)";
 				//Findという検索メソッドを使用
 				samRange = workcells->Find(
-					key,
+					pad,
 					Type::Missing,
 					Microsoft::Office::Interop::Excel::XlFindLookIn::xlValues,
 					Microsoft::Office::Interop::Excel::XlLookAt::xlPart,
@@ -147,6 +148,11 @@ namespace ReadFile1 {
 					Type::Missing,
 					Type::Missing
 				);
+				MessageBox::Show("該当セルです:" + samRange->Text->ToString()+":"+samRange->Row+":"+samRange->Column);
+				//結合セルの最終行を取得
+				workcells = samRange->MergeArea;
+				workcells = (Microsoft::Office::Interop::Excel::Range^)workcells->Cells[workcells->Rows->Count, 1];
+				MessageBox::Show("ワークセル最終行です:" + workcells->Row);
 				//隣のセルにrangeを移す
 				workcells = (Microsoft::Office::Interop::Excel::Range^)worksheet->Cells[samRange->Row, samRange->Column+1];
 				//該当セルが結合セルかどうかの判定
