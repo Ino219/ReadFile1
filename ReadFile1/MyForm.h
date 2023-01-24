@@ -101,6 +101,8 @@ namespace ReadFile1 {
 		Microsoft::Office::Interop::Excel::Range^ samRange=nullptr;
 		Microsoft::Office::Interop::Excel::Range^ workcells=nullptr;
 		Microsoft::Office::Interop::Excel::Range^ allcells=nullptr;
+		Microsoft::Office::Interop::Excel::Range^ targetCell = nullptr;
+
 		//MessageBox::Show(file[0]);
 		//MessageBox::Show(title);
 		//MessageBox::Show(extension);
@@ -173,6 +175,41 @@ namespace ReadFile1 {
 					workcells = (Microsoft::Office::Interop::Excel::Range^)workcells->Cells[1, 1];
 					MessageBox::Show("結合セルです:"+workcells->Text->ToString());
 				}
+
+				
+				String^ target = "ターゲット";
+				samRange = nullptr;
+				//allcellsをrange範囲に指定しないと、findは回ってもfindnextが回らない
+				samRange = allcells->Find(
+					target,
+					Type::Missing,
+					Microsoft::Office::Interop::Excel::XlFindLookIn::xlValues,
+					Microsoft::Office::Interop::Excel::XlLookAt::xlPart,
+					Microsoft::Office::Interop::Excel::XlSearchOrder::xlByRows,
+					Microsoft::Office::Interop::Excel::XlSearchDirection::xlNext,
+					false,
+					Type::Missing,
+					Type::Missing
+				);
+
+				if (samRange != nullptr) {
+					MessageBox::Show(samRange->Row + "行目の" + samRange->Column + "列目で" + "最初のターゲットは見つかりました");
+					//最初のセルをターゲットセルに代入
+					targetCell = samRange;
+					do {
+						samRange = allcells->FindNext(samRange);
+						if (targetCell->Row == samRange->Row&&targetCell->Column == samRange->Column) {
+							break;
+						}
+						else {
+							MessageBox::Show(samRange->Row + "行目の" + samRange->Column + "列目で" + "次のターゲットは見つかりました");
+
+						}
+					} while (true);
+
+				}
+
+				
 				
 			}
 			catch (Exception^ e) {
@@ -182,7 +219,8 @@ namespace ReadFile1 {
 				//COM解放
 				app_->Workbooks->Close();
 
-				System::Runtime::InteropServices::Marshal::ReleaseComObject(samRange);;
+				System::Runtime::InteropServices::Marshal::ReleaseComObject(targetCell);
+				System::Runtime::InteropServices::Marshal::ReleaseComObject(samRange);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(workcells);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(allcells);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(worksheet);
