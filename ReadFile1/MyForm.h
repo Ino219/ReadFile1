@@ -203,7 +203,7 @@ namespace ReadFile1 {
 						}
 						else {
 							MessageBox::Show(samRange->Row + "行目の" + samRange->Column + "列目で" + "次のターゲットは見つかりました");
-
+							//ここに処理を記述
 						}
 					} while (true);
 
