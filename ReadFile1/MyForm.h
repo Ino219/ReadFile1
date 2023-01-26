@@ -288,11 +288,13 @@ namespace ReadFile1 {
 			String^ val="";
 
 			while ((line=sr->ReadLine()) != nullptr) {
-				/*std::string str = msclr::interop::marshal_as<std::string>(line);
+				std::string str = msclr::interop::marshal_as<std::string>(line);
 				std::smatch m;
 				if (std::regex_match(str, m, std::regex("[A-Z][0-9]{2}[)]"))) {
-					MessageBox::Show("str:"+m.str);
-				}*/
+					std::string tmp=m[0].str();
+					String^ cpp= msclr::interop::marshal_as<System::String^>(tmp);
+					MessageBox::Show(cpp);
+				}
 
 				for (System::Text::RegularExpressions::Match^ match = regex->Match(line);
 					match->Success; match = match->NextMatch())
