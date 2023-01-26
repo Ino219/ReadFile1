@@ -1,5 +1,8 @@
 #pragma once
-
+#include "cmpForm.h"
+#include <string>
+#include <regex>
+#include <msclr/marshal_cppstd.h>
 
 namespace ReadFile1 {
 
@@ -42,6 +45,7 @@ namespace ReadFile1 {
 			}
 		}
 	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Button^  button1;
 	protected:
 
 	private:
@@ -58,6 +62,7 @@ namespace ReadFile1 {
 		void InitializeComponent(void)
 		{
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -71,12 +76,23 @@ namespace ReadFile1 {
 			this->textBox1->DragDrop += gcnew System::Windows::Forms::DragEventHandler(this, &MyForm::textBox1_DragDrop);
 			this->textBox1->DragEnter += gcnew System::Windows::Forms::DragEventHandler(this, &MyForm::textBox1_DragEnter);
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(77, 168);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"button1";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			// 
 			// MyForm
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox1);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
@@ -139,7 +155,7 @@ namespace ReadFile1 {
 				String^ key = "sample";
 				String^ pad = "パッド中心座標(原点中心)";
 				//Findという検索メソッドを使用
-				samRange = workcells->Find(
+				/*samRange = workcells->Find(
 					pad,
 					Type::Missing,
 					Microsoft::Office::Interop::Excel::XlFindLookIn::xlValues,
@@ -207,7 +223,21 @@ namespace ReadFile1 {
 						}
 					} while (true);
 
+				}*/
+				while (true) {
+					//処理を記述
+					Microsoft::Office::Interop::Excel::WorksheetFunction^ works=app_->WorksheetFunction;
+					try {
+						double test = works->Match(pad, allcells, 0);
+					}
+					catch (Exception^ e) {
+						MessageBox::Show(e->ToString());
+					}
+					System::Runtime::InteropServices::Marshal::ReleaseComObject(works);
+					break;
+					//samRange = worksheet->Cells(WorksheetFunction::Match(pad, allcells, 0), 1);
 				}
+
 
 				
 				
@@ -219,8 +249,9 @@ namespace ReadFile1 {
 				//COM解放
 				app_->Workbooks->Close();
 
-				System::Runtime::InteropServices::Marshal::ReleaseComObject(targetCell);
-				System::Runtime::InteropServices::Marshal::ReleaseComObject(samRange);
+				//System::Runtime::InteropServices::Marshal::ReleaseComObject(targetCell);
+				//System::Runtime::InteropServices::Marshal::ReleaseComObject(samRange);
+				
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(workcells);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(allcells);
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(worksheet);
@@ -239,5 +270,66 @@ namespace ReadFile1 {
 			e->Effect = DragDropEffects::None;
 		}
 	}
-	};
+	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+		String^ path = "sample.txt";
+		//cli::array<System::Collections::Generic::List<String^>^> dlists = gcnew array<System::Collections::Generic::List<String^>^>{};
+		//このリストだけを基板フォームに渡すか、グローバル的に使えるように配置する
+		System::Collections::Generic::List<System::Collections::Generic::List<String^>^>^ DList = gcnew System::Collections::Generic::List<System::Collections::Generic::List<String^>^>;
+		System::Collections::Generic::List<String^>^ cmpNamelist = gcnew System::Collections::Generic::List<String^>;
+		System::Collections::Generic::List<String^>^ cmpX = gcnew System::Collections::Generic::List<String^>;
+
+		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)]");
+		System::Text::RegularExpressions::Regex^ regexX = gcnew System::Text::RegularExpressions::Regex("x=[0-9]+");
+		std::regex re("[A-Z][0-9]{2}[)]$");
+		StreamReader^ sr;
+		try {
+			sr = gcnew StreamReader(path);
+			String^ line;
+			String^ val="";
+
+			while ((line=sr->ReadLine()) != nullptr) {
+				/*std::string str = msclr::interop::marshal_as<std::string>(line);
+				std::smatch m;
+				if (std::regex_match(str, m, std::regex("[A-Z][0-9]{2}[)]"))) {
+					MessageBox::Show("str:"+m.str);
+				}*/
+
+				for (System::Text::RegularExpressions::Match^ match = regex->Match(line);
+					match->Success; match = match->NextMatch())
+				{
+					if (match->Value->Length > 0)
+					{
+						String^ cName=match->Value;
+						//一致する文字列(line)があったときに"x="で始まる部分を検索し、値を取得する
+						if (regexX->Match(line)->Success) {
+							val = regexX->Match(line)->Value->ToString();
+							cmpNamelist->Add(cName);
+							cmpX->Add(val);
+							
+						}
+						else {
+							val = "";
+						}
+						//MessageBox::Show(match->Value+"::"+val);
+					}
+				}
+			}
+			for (int i = 0; i < cmpNamelist->Count; i++) {
+				//MessageBox::Show("部品名:" + cmpNamelist[i] + ":x:" + cmpX[i]);
+			}
+			DList->Add(cmpNamelist);
+			DList->Add(cmpX);
+		}
+		catch (Exception^ e) {
+			MessageBox::Show(e->ToString());
+		}
+		finally{
+			MessageBox::Show("検索終了");
+			sr->Close();
+			cmpForm^ c1 = gcnew cmpForm(DList);
+			c1->ShowDialog();
+		}
+
+	}
+};
 }
