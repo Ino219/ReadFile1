@@ -139,7 +139,9 @@ namespace ReadFile1 {
 		//MessageBox::Show(title);
 		//MessageBox::Show(extension);
 		//MessageBox::Show(directory);
-		if (extension == ".xlsx", "xls", "xlw") {
+		//extension==".xlsx","xls","xlw"という記述だとコードは通るが、if文がきかなくなる。
+		//例えば、指定したファイル形式でなくても、if文を通るようになってしまう
+		if (extension == ".xlsx"|| extension=="xls"||extension== "xlw") {
 			try {
 				app_ = gcnew Microsoft::Office::Interop::Excel::ApplicationClass();
 				//Excelブックの表示はしない
@@ -280,6 +282,30 @@ namespace ReadFile1 {
 				System::Runtime::InteropServices::Marshal::ReleaseComObject(app_);
 
 			}
+		}
+		else if (extension == "txt",".txt") {
+		StreamReader^ sr = gcnew StreamReader(file[0]);
+		String^ line;
+		System::Collections::Generic::List<String^> strList;
+		cli::array<String^>^ arrays;
+		try {
+			while ((line = sr->ReadLine()) != nullptr) {
+				if (line->Contains("VVV")) {
+					//ラベルの取得.arrayで受ける
+					arrays=line->Split(' ');
+				}
+			}
+			for each (String^ var in arrays)
+			{
+				MessageBox::Show(var);
+			}
+		}
+		catch (Exception^ e) {
+			MessageBox::Show(e->ToString());
+		}
+		finally{
+			sr->Close();
+		}
 		}
 		
 	}
