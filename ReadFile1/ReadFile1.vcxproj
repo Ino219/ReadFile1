@@ -169,6 +169,14 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>false</Isolated>
     </COMReference>
+    <COMReference Include="Microsoft.Office.PowerPoint.2.12.dll">
+      <Guid>91493440-5a91-11cf-8700-00aa0060263b</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>12</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>false</Isolated>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

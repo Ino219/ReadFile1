@@ -15,6 +15,7 @@ namespace ReadFile1 {
 
 	using namespace Microsoft::Office::Core;
 	using namespace Microsoft::Office::Interop::Excel;
+	using namespace Microsoft::Office::Interop::PowerPoint;
 
 	using namespace System::IO;
 	
@@ -46,6 +47,7 @@ namespace ReadFile1 {
 		}
 	private: System::Windows::Forms::TextBox^  textBox1;
 	private: System::Windows::Forms::Button^  button1;
+	private: System::Windows::Forms::Button^  button2;
 	protected:
 
 	private:
@@ -63,6 +65,7 @@ namespace ReadFile1 {
 		{
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -86,12 +89,23 @@ namespace ReadFile1 {
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(124, 218);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(75, 23);
+			this->button2->TabIndex = 2;
+			this->button2->Text = L"button2";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
+			// 
 			// MyForm
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox1);
 			this->Name = L"MyForm";
@@ -118,6 +132,8 @@ namespace ReadFile1 {
 		Microsoft::Office::Interop::Excel::Range^ workcells=nullptr;
 		Microsoft::Office::Interop::Excel::Range^ allcells=nullptr;
 		Microsoft::Office::Interop::Excel::Range^ targetCell = nullptr;
+
+		
 
 		//MessageBox::Show(file[0]);
 		//MessageBox::Show(title);
@@ -154,6 +170,8 @@ namespace ReadFile1 {
 				//検索するワード
 				String^ key = "sample";
 				String^ pad = "パッド中心座標(原点中心)";
+
+				Microsoft::Office::Interop::Excel::Range^ samcell = (Microsoft::Office::Interop::Excel::Range^)worksheet->Cells[2, 2];
 				//Findという検索メソッドを使用
 				/*samRange = workcells->Find(
 					pad,
@@ -226,14 +244,17 @@ namespace ReadFile1 {
 				}*/
 				while (true) {
 					//処理を記述
-					Microsoft::Office::Interop::Excel::WorksheetFunction^ works=app_->WorksheetFunction;
+					Microsoft::Office::Interop::Excel::WorksheetFunction^ works = app_->WorksheetFunction; 
 					try {
-						double test = works->Match(pad, allcells, 0);
+						
+						works->Match(samcell, allcells, 0);
 					}
 					catch (Exception^ e) {
 						MessageBox::Show(e->ToString());
 					}
-					System::Runtime::InteropServices::Marshal::ReleaseComObject(works);
+					finally{
+				    System::Runtime::InteropServices::Marshal::ReleaseComObject(works);
+					}
 					break;
 					//samRange = worksheet->Cells(WorksheetFunction::Match(pad, allcells, 0), 1);
 				}
@@ -278,7 +299,7 @@ namespace ReadFile1 {
 		System::Collections::Generic::List<String^>^ cmpNamelist = gcnew System::Collections::Generic::List<String^>;
 		System::Collections::Generic::List<String^>^ cmpX = gcnew System::Collections::Generic::List<String^>;
 
-		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)]");
+		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
 		System::Text::RegularExpressions::Regex^ regexX = gcnew System::Text::RegularExpressions::Regex("x=[0-9]+");
 		std::regex re("[A-Z][0-9]{2}[)]$");
 		StreamReader^ sr;
@@ -293,7 +314,7 @@ namespace ReadFile1 {
 				if (std::regex_match(str, m, std::regex("[A-Z][0-9]{2}[)]"))) {
 					std::string tmp=m[0].str();
 					String^ cpp= msclr::interop::marshal_as<System::String^>(tmp);
-					MessageBox::Show(cpp);
+					MessageBox::Show("++"+cpp);
 				}
 
 				for (System::Text::RegularExpressions::Match^ match = regex->Match(line);
@@ -311,8 +332,9 @@ namespace ReadFile1 {
 						}
 						else {
 							val = "";
+							
 						}
-						//MessageBox::Show(match->Value+"::"+val);
+						MessageBox::Show(match->Value + "::" + val);
 					}
 				}
 			}
@@ -333,5 +355,32 @@ namespace ReadFile1 {
 		}
 
 	}
+private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+	String^ path = "C:\\Users\\chach\\Desktop\\ppt.pptx";
+	int slide_Index = 1;
+	int shapesIndex = 1;
+	Microsoft::Office::Interop::PowerPoint::Application^ apt = gcnew Microsoft::Office::Interop::PowerPoint::ApplicationClass();
+	Microsoft::Office::Interop::PowerPoint::Presentations^ presen = apt->Presentations;
+	Microsoft::Office::Interop::PowerPoint::Presentation^ presense = presen->Open(
+		path,
+		MsoTriState::msoFalse,
+		MsoTriState::msoFalse,
+		MsoTriState::msoFalse
+	);
+
+	Microsoft::Office::Interop::PowerPoint::Shape^ shape=presense->Slides[slide_Index]->Shapes[shapesIndex];
+	
+	if (shape->TextFrame->HasText == MsoTriState::msoTrue) {
+		MessageBox::Show(shape->TextFrame->TextRange->Text);
+	}
+	else {
+		MessageBox::Show(shape->Name+"テキストはありません");
+	}
+	//以下のコードで[1,1]セルのテキストが取得できる
+	String^ text = shape->Table->Cell(1, 1)->Shape->TextFrame->TextRange->Text;
+	MessageBox::Show(text);
+
+	presense->Close();
+}
 };
 }

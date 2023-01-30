@@ -34,5 +34,8 @@
     <EmbeddedResource Include="MyForm.resx">
       <Filter>リソース ファイル</Filter>
     </EmbeddedResource>
+    <EmbeddedResource Include="cmpForm.resx">
+      <Filter>リソース ファイル</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
