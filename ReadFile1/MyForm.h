@@ -48,6 +48,7 @@ namespace ReadFile1 {
 	private: System::Windows::Forms::TextBox^  textBox1;
 	private: System::Windows::Forms::Button^  button1;
 	private: System::Windows::Forms::Button^  button2;
+	private: System::Windows::Forms::Button^  button3;
 	protected:
 
 	private:
@@ -66,6 +67,7 @@ namespace ReadFile1 {
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -99,12 +101,23 @@ namespace ReadFile1 {
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(162, 115);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(75, 23);
+			this->button3->TabIndex = 3;
+			this->button3->Text = L"button3";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
+			// 
 			// MyForm
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox1);
@@ -407,6 +420,16 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 	MessageBox::Show(text);
 
 	presense->Close();
+}
+private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
+	cli::array<String^>^ filelist=Directory::GetFiles("C:\\Users\\chach\\Desktop\\py");
+	String^ sample = "debag1";
+	for each (String^ var in filelist)
+	{
+		if (var->Contains(sample)) {
+			MessageBox::Show(var);
+		}
+	}
 }
 };
 }
