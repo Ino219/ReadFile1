@@ -21,6 +21,10 @@ namespace ReadFile1 {
 	using namespace System::IO::Compression;
 	using namespace System::Xml;
 
+	using namespace System::Threading;
+
+	using namespace System::Threading::Tasks;
+
 
 	/// <summary>
 	/// MyForm の概要
@@ -359,14 +363,17 @@ namespace ReadFile1 {
 		}
 	}
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-		String^ path = "sample.txt";
+		//String^ path = "sample.txt";
+		String^ path = "C:\\Users\\chach\\Desktop\\regex.txt";
 		//cli::array<System::Collections::Generic::List<String^>^> dlists = gcnew array<System::Collections::Generic::List<String^>^>{};
 		//このリストだけを基板フォームに渡すか、グローバル的に使えるように配置する
 		System::Collections::Generic::List<System::Collections::Generic::List<String^>^>^ DList = gcnew System::Collections::Generic::List<System::Collections::Generic::List<String^>^>;
 		System::Collections::Generic::List<String^>^ cmpNamelist = gcnew System::Collections::Generic::List<String^>;
 		System::Collections::Generic::List<String^>^ cmpX = gcnew System::Collections::Generic::List<String^>;
 
-		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
+		//System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
+		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+ [0-9:]{8}");
+
 		System::Text::RegularExpressions::Regex^ regexX = gcnew System::Text::RegularExpressions::Regex("x=[0-9]+");
 		std::regex re("[A-Z][0-9]{2}[)]$");
 		StreamReader^ sr;
@@ -376,6 +383,16 @@ namespace ReadFile1 {
 			String^ val = "";
 
 			while ((line = sr->ReadLine()) != nullptr) {
+
+				cli::array<String^>^ linelist = line->Split('"');
+				for each (String^ var in linelist)
+				{
+					System::Text::RegularExpressions::Match^ match = regex->Match(var);
+					if (match->Success) {
+						MessageBox::Show(var + "一致");
+					}
+				}
+
 				std::string str = msclr::interop::marshal_as<std::string>(line);
 				std::smatch m;
 				if (std::regex_match(str, m, std::regex("[A-Z][0-9]{2}[)]"))) {
@@ -423,7 +440,7 @@ namespace ReadFile1 {
 
 	}
 	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
-		String^ path = "C:\\Users\\chach\\Desktop\\ppt.pptx";
+		String^ path = "C:\\Users\\chach\\Desktop\\ppt2.pptx";
 		int slide_Index = 1;
 		int shapesIndex = 1;
 		Microsoft::Office::Interop::PowerPoint::Application^ apt = gcnew Microsoft::Office::Interop::PowerPoint::ApplicationClass();
@@ -434,8 +451,17 @@ namespace ReadFile1 {
 			MsoTriState::msoFalse,
 			MsoTriState::msoFalse
 		);
+		String^ picturePath = "C:\\Users\\chach\\Desktop\\56.jpg";
 
-		Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense->Slides[slide_Index]->Shapes[shapesIndex];
+		Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense->Slides[slide_Index]->Shapes->AddPicture(picturePath, MsoTriState::msoFalse, MsoTriState::msoTrue, 100, 100, 500, 500);
+		shape->Name = "gazou";
+
+		String^ picturePath1 = "C:\\Users\\chach\\Desktop\\msd.png";
+
+		Microsoft::Office::Interop::PowerPoint::Shape^ shape1 = presense->Slides[slide_Index]->Shapes->AddPicture(picturePath1, MsoTriState::msoFalse, MsoTriState::msoTrue, 600, 100, 500, 500);
+		shape1->Name = "gazou1";
+		
+		/*Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense->Slides[slide_Index]->Shapes[shapesIndex];
 
 		if (shape->TextFrame->HasText == MsoTriState::msoTrue) {
 			MessageBox::Show(shape->TextFrame->TextRange->Text);
@@ -448,9 +474,15 @@ namespace ReadFile1 {
 		if (shape->HasTable == MsoTriState::msoTrue) {
 			String^ text = shape->Table->Cell(1, 1)->Shape->TextFrame->TextRange->Text;
 			MessageBox::Show(text);
-		}
-
-		presense->Close();
+		}*/
+		presense->Save();
+			try {
+				presense->Close();
+				
+			}
+			catch (Exception^ e) {
+				MessageBox::Show(e->ToString());
+			}
 	}
 	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
 		cli::array<String^>^ filelist = Directory::GetFiles("C:\\Users\\chach\\Desktop\\py");
@@ -470,8 +502,31 @@ namespace ReadFile1 {
 			MessageBox::Show(val->FullName);
 		}
 	}
+	private: System::String^ sleep_(String^ Message) {
+		System::Threading::Thread::Sleep(300);
+		MessageBox::Show(Message+"実行中");
+		return Message;
+	}
+			 private: static void SampleProc()
+			 {
+				 MessageBox::Show("aa");
+			 }
+
+			private: static void ThreadMethod()
+			{
+				 MessageBox::Show("A");
+			}
 	private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		
+
+		Thread^ t = gcnew Thread(gcnew Threading::ThreadStart(SampleProc));
+		Thread^ t1 = gcnew Thread(gcnew Threading::ThreadStart(SampleProc));
+		Thread^ threadA = gcnew Thread(gcnew ThreadStart(ThreadMethod));
+		t->Start();
 		//出力先を指定
+
+
 		XmlWriter^ writer = XmlWriter::Create("C:\\Users\\chach\\Desktop\\test.xml");
 		//ルートノードを一つにしないと、エラー発生
 		writer->WriteStartElement("root");
