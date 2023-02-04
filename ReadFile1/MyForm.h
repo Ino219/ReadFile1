@@ -25,6 +25,10 @@ namespace ReadFile1 {
 
 	using namespace System::Threading::Tasks;
 
+	using namespace System::Text::RegularExpressions;
+
+	using namespace System::Collections::Generic;
+
 
 	/// <summary>
 	/// MyForm ‚ÌŠT—v
@@ -169,7 +173,8 @@ namespace ReadFile1 {
 		String^ title = System::IO::Path::GetFileName(file[0]);
 		//ƒfƒBƒŒƒNƒgƒŠ–¼æ“¾
 		String^ directory = System::IO::Path::GetDirectoryName(file[0]);
-		//interop‚ÌéŒ¾
+
+		//interop‚Ì‰Šú‰»éŒ¾
 		Microsoft::Office::Interop::Excel::Application^ app_ = nullptr;
 		Microsoft::Office::Interop::Excel::Workbook^ workbook = nullptr;
 		Microsoft::Office::Interop::Excel::Worksheet^ worksheet = nullptr;
@@ -177,8 +182,6 @@ namespace ReadFile1 {
 		Microsoft::Office::Interop::Excel::Range^ workcells = nullptr;
 		Microsoft::Office::Interop::Excel::Range^ allcells = nullptr;
 		Microsoft::Office::Interop::Excel::Range^ targetCell = nullptr;
-
-
 
 		//MessageBox::Show(file[0]);
 		//MessageBox::Show(title);
@@ -305,10 +308,6 @@ namespace ReadFile1 {
 					break;
 					//samRange = worksheet->Cells(WorksheetFunction::Match(pad, allcells, 0), 1);
 				}
-
-
-
-
 			}
 			catch (Exception^ e) {
 				MessageBox::Show(e->ToString());
@@ -373,6 +372,8 @@ namespace ReadFile1 {
 
 		//System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
 		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+ [0-9:]{8}");
+		System::Text::RegularExpressions::Regex^ part_regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+");
+
 
 		System::Text::RegularExpressions::Regex^ regexX = gcnew System::Text::RegularExpressions::Regex("x=[0-9]+");
 		std::regex re("[A-Z][0-9]{2}[)]$");
@@ -390,7 +391,15 @@ namespace ReadFile1 {
 					System::Text::RegularExpressions::Match^ match = regex->Match(var);
 					if (match->Success) {
 						MessageBox::Show(var + "ˆê’v");
+						MessageBox::Show("test" + match->Value);
 					}
+					if (part_regex->IsMatch(var, 0)) {
+						MessageBox::Show("æ“ªˆê’v"+var);
+					}
+					if (var->Contains("@[0-9]{4}")) {
+						MessageBox::Show("³‹K•\Œ»’¼Ú“ü—Í" + var);
+					}
+
 				}
 
 				std::string str = msclr::interop::marshal_as<std::string>(line);
