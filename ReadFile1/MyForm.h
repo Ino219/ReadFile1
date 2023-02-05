@@ -29,6 +29,8 @@ namespace ReadFile1 {
 
 	using namespace System::Collections::Generic;
 
+	using namespace System::Diagnostics;
+
 
 	/// <summary>
 	/// MyForm の概要
@@ -61,6 +63,7 @@ namespace ReadFile1 {
 	private: System::Windows::Forms::Button^  button3;
 	private: System::Windows::Forms::Button^  button4;
 	private: System::Windows::Forms::Button^  button5;
+	private: System::Windows::Forms::Button^  button6;
 	protected:
 
 	private:
@@ -82,6 +85,7 @@ namespace ReadFile1 {
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -97,53 +101,63 @@ namespace ReadFile1 {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(77, 168);
+			this->button1->Location = System::Drawing::Point(32, 94);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(75, 23);
 			this->button1->TabIndex = 1;
-			this->button1->Text = L"button1";
+			this->button1->Text = L"正規表現";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(124, 218);
+			this->button2->Location = System::Drawing::Point(32, 123);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(75, 23);
 			this->button2->TabIndex = 2;
-			this->button2->Text = L"button2";
+			this->button2->Text = L"PowerPoint";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
 			// button3
 			// 
-			this->button3->Location = System::Drawing::Point(162, 115);
+			this->button3->Location = System::Drawing::Point(32, 152);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(75, 23);
 			this->button3->TabIndex = 3;
-			this->button3->Text = L"button3";
+			this->button3->Text = L"フォルダ管理";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(32, 115);
+			this->button4->Location = System::Drawing::Point(32, 181);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(75, 23);
 			this->button4->TabIndex = 4;
-			this->button4->Text = L"button4";
+			this->button4->Text = L"Zip解凍";
 			this->button4->UseVisualStyleBackColor = true;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
 			// 
 			// button5
 			// 
-			this->button5->Location = System::Drawing::Point(169, 168);
+			this->button5->Location = System::Drawing::Point(32, 210);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(75, 23);
 			this->button5->TabIndex = 5;
-			this->button5->Text = L"button5";
+			this->button5->Text = L"Xml";
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
+			// 
+			// button6
+			// 
+			this->button6->Location = System::Drawing::Point(140, 94);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(75, 23);
+			this->button6->TabIndex = 6;
+			this->button6->Text = L"スレッド";
+			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
 			// MyForm
 			// 
@@ -151,6 +165,7 @@ namespace ReadFile1 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
@@ -379,6 +394,8 @@ namespace ReadFile1 {
 		System::Text::RegularExpressions::Regex^ extension_regex = gcnew System::Text::RegularExpressions::Regex("[0-9a-zA-Z.,:;_-]+[.][a-zA-Z]{3,4}");
 		//末尾の拡張子を判定
 		System::Text::RegularExpressions::Regex^ end_regex = gcnew System::Text::RegularExpressions::Regex("[.][a-zA-Z]{3,4}$");
+		//拡張子部分に名前を付けて、グループとして扱えるように改良
+		System::Text::RegularExpressions::Regex^ end2_regex = gcnew System::Text::RegularExpressions::Regex("(?<extension>[.][a-zA-Z]{3,4}$)");
 
 
 		System::Text::RegularExpressions::Regex^ regexX = gcnew System::Text::RegularExpressions::Regex("x=[0-9]+");
@@ -391,9 +408,10 @@ namespace ReadFile1 {
 
 			while ((line = sr->ReadLine()) != nullptr) {
 
-				Match^ match2 = end_regex->Match(line);
+				Match^ match2 = end2_regex->Match(line);
 				if (match2->Success) {
-					MessageBox::Show("拡張子:"+line);
+					//MessageBox::Show("拡張子:"+line);
+					MessageBox::Show("拡張子"+match2->Groups["extension"]->Value->ToString());
 				}
 
 				cli::array<String^>^ linelist = line->Split('"');
@@ -458,25 +476,36 @@ namespace ReadFile1 {
 	}
 	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
 		String^ path = "C:\\Users\\chach\\Desktop\\ppt2.pptx";
+		String^ path2 = "C:\\Users\\chach\\Desktop\\pptest2";
+		String^ picturePath = "C:\\Users\\chach\\Desktop\\56.jpg";
+		String^ picturePath1 = "C:\\Users\\chach\\Desktop\\msd.png";
 		int slide_Index = 1;
 		int shapesIndex = 1;
 		Microsoft::Office::Interop::PowerPoint::Application^ apt = gcnew Microsoft::Office::Interop::PowerPoint::ApplicationClass();
 		Microsoft::Office::Interop::PowerPoint::Presentations^ presen = apt->Presentations;
+		//プレゼンテーション新規作成
+		Microsoft::Office::Interop::PowerPoint::Presentation^ presense1 = presen->Add(MsoTriState::msoFalse);
+		//スライド追加
+		presense1->Slides->Add(slide_Index, Microsoft::Office::Interop::PowerPoint::PpSlideLayout::ppLayoutBlank);
+		//画像追加1
+		Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense1->Slides[slide_Index]->Shapes->AddPicture(picturePath, MsoTriState::msoFalse, MsoTriState::msoTrue, 100, 100, 500, 500);
+		shape->Name = "gazou1";
+		//画像追加2
+		Microsoft::Office::Interop::PowerPoint::Shape^ shape1 = presense1->Slides[slide_Index]->Shapes->AddPicture(picturePath1, MsoTriState::msoFalse, MsoTriState::msoTrue, 600, 100, 500, 500);
+		shape1->Name = "gazou2";
+		//セーブ
+		presense1->SaveAs(path2, Microsoft::Office::Interop::PowerPoint::PpSaveAsFileType::ppSaveAsDefault, MsoTriState::msoTrue);
+		//閉じる
+		presense1->Close();
+		apt->Quit();
+		/*
 		Microsoft::Office::Interop::PowerPoint::Presentation^ presense = presen->Open(
-			path,
+			path2,
 			MsoTriState::msoFalse,
 			MsoTriState::msoFalse,
 			MsoTriState::msoFalse
 		);
-		String^ picturePath = "C:\\Users\\chach\\Desktop\\56.jpg";
-
-		Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense->Slides[slide_Index]->Shapes->AddPicture(picturePath, MsoTriState::msoFalse, MsoTriState::msoTrue, 100, 100, 500, 500);
-		shape->Name = "gazou";
-
-		String^ picturePath1 = "C:\\Users\\chach\\Desktop\\msd.png";
-
-		Microsoft::Office::Interop::PowerPoint::Shape^ shape1 = presense->Slides[slide_Index]->Shapes->AddPicture(picturePath1, MsoTriState::msoFalse, MsoTriState::msoTrue, 600, 100, 500, 500);
-		shape1->Name = "gazou1";
+		
 		
 		/*Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense->Slides[slide_Index]->Shapes[shapesIndex];
 
@@ -491,15 +520,17 @@ namespace ReadFile1 {
 		if (shape->HasTable == MsoTriState::msoTrue) {
 			String^ text = shape->Table->Cell(1, 1)->Shape->TextFrame->TextRange->Text;
 			MessageBox::Show(text);
-		}*/
-		presense->Save();
+		}
+		//presense1->Save();
 			try {
 				presense->Close();
 				
 			}
 			catch (Exception^ e) {
 				MessageBox::Show(e->ToString());
-			}
+			}*/
+		
+		
 	}
 	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
 		cli::array<String^>^ filelist = Directory::GetFiles("C:\\Users\\chach\\Desktop\\py");
@@ -519,31 +550,25 @@ namespace ReadFile1 {
 			MessageBox::Show(val->FullName);
 		}
 	}
-	private: System::String^ sleep_(String^ Message) {
+	private: static System::String^ sleep_(String^ Message) {
 		System::Threading::Thread::Sleep(300);
 		MessageBox::Show(Message+"実行中");
 		return Message;
 	}
-			 private: static void SampleProc()
-			 {
-				 MessageBox::Show("aa");
-			 }
+	private: static void SampleProc()
+		{
+			MessageBox::Show("SampleProc実行中");
+			sleep_("sleep_実行中");
+			ThreadMethod();
+		}
 
-			private: static void ThreadMethod()
-			{
-				 MessageBox::Show("A");
-			}
+	private: static void ThreadMethod()
+		{
+			MessageBox::Show("ThreadMethod実行中");
+		}
 	private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
 
-		
-
-		Thread^ t = gcnew Thread(gcnew Threading::ThreadStart(SampleProc));
-		Thread^ t1 = gcnew Thread(gcnew Threading::ThreadStart(SampleProc));
-		Thread^ threadA = gcnew Thread(gcnew ThreadStart(ThreadMethod));
-		t->Start();
 		//出力先を指定
-
-
 		XmlWriter^ writer = XmlWriter::Create("C:\\Users\\chach\\Desktop\\test.xml");
 		//ルートノードを一つにしないと、エラー発生
 		writer->WriteStartElement("root");
@@ -579,5 +604,12 @@ namespace ReadFile1 {
 		writer->Close();
 		MessageBox::Show("出力完了");
 	}
-	};
+	private: System::Void button6_Click(System::Object^  sender, System::EventArgs^  e) {
+		Thread^ t = gcnew Thread(gcnew Threading::ThreadStart(SampleProc));
+		//Thread^ t1 = gcnew Thread(gcnew Threading::ThreadStart(sleep_("msg")));
+		//Thread^ threadA = gcnew Thread(gcnew ThreadStart(ThreadMethod));
+		t->Start();
+		
+	}
+};
 	}
