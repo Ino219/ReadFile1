@@ -371,8 +371,14 @@ namespace ReadFile1 {
 		System::Collections::Generic::List<String^>^ cmpX = gcnew System::Collections::Generic::List<String^>;
 
 		//System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
+		//日時を判定
 		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+ [0-9:]{8}");
+		//日付を判定
 		System::Text::RegularExpressions::Regex^ part_regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+");
+		//英数字、記号のファイル名と拡張子を判定
+		System::Text::RegularExpressions::Regex^ extension_regex = gcnew System::Text::RegularExpressions::Regex("[0-9a-zA-Z.,:;_-]+[.][a-zA-Z]{3,4}");
+		//末尾の拡張子を判定
+		System::Text::RegularExpressions::Regex^ end_regex = gcnew System::Text::RegularExpressions::Regex("[.][a-zA-Z]{3,4}$");
 
 
 		System::Text::RegularExpressions::Regex^ regexX = gcnew System::Text::RegularExpressions::Regex("x=[0-9]+");
@@ -385,6 +391,11 @@ namespace ReadFile1 {
 
 			while ((line = sr->ReadLine()) != nullptr) {
 
+				Match^ match2 = end_regex->Match(line);
+				if (match2->Success) {
+					MessageBox::Show("拡張子:"+line);
+				}
+
 				cli::array<String^>^ linelist = line->Split('"');
 				for each (String^ var in linelist)
 				{
@@ -395,9 +406,6 @@ namespace ReadFile1 {
 					}
 					if (part_regex->IsMatch(var, 0)) {
 						MessageBox::Show("先頭一致"+var);
-					}
-					if (var->Contains("@[0-9]{4}")) {
-						MessageBox::Show("正規表現直接入力" + var);
 					}
 
 				}
