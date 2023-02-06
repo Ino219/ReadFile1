@@ -533,13 +533,21 @@ namespace ReadFile1 {
 		
 	}
 	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
-		cli::array<String^>^ filelist = Directory::GetFiles("C:\\Users\\chach\\Desktop\\py");
-		String^ sample = "debag1";
-		for each (String^ var in filelist)
-		{
-			if (var->Contains(sample)) {
-				MessageBox::Show(var);
+		String^ sampleDirectory = "C:\\Users\\chach\\Desktop\\py2";
+		if (Directory::Exists(sampleDirectory)) {
+			cli::array<String^>^ filelist = Directory::GetFiles(sampleDirectory);
+			String^ sample = "debag1";
+			for each (String^ var in filelist)
+			{
+				if (var->Contains(sample)) {
+					MessageBox::Show(var);
+				}
 			}
+		}
+		else {
+			//フォルダーを新規作成
+			Directory::CreateDirectory(sampleDirectory);
+
 		}
 	}
 	private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
