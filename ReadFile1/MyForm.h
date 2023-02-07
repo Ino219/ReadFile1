@@ -1,5 +1,6 @@
 #pragma once
 #include "cmpForm.h"
+#include "PictureForm.h"
 #include <string>
 #include <regex>
 #include <msclr/marshal_cppstd.h>
@@ -64,6 +65,7 @@ namespace ReadFile1 {
 	private: System::Windows::Forms::Button^  button4;
 	private: System::Windows::Forms::Button^  button5;
 	private: System::Windows::Forms::Button^  button6;
+	private: System::Windows::Forms::Button^  button7;
 	protected:
 
 	private:
@@ -86,6 +88,7 @@ namespace ReadFile1 {
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -159,12 +162,23 @@ namespace ReadFile1 {
 			this->button6->UseVisualStyleBackColor = true;
 			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
+			// button7
+			// 
+			this->button7->Location = System::Drawing::Point(140, 123);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(75, 23);
+			this->button7->TabIndex = 7;
+			this->button7->Text = L"‰æ‘œo—Í";
+			this->button7->UseVisualStyleBackColor = true;
+			this->button7->Click += gcnew System::EventHandler(this, &MyForm::button7_Click);
+			// 
 			// MyForm
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
@@ -619,5 +633,9 @@ namespace ReadFile1 {
 		t->Start();
 		
 	}
+private: System::Void button7_Click(System::Object^  sender, System::EventArgs^  e) {
+	PictureForm^ PF = gcnew PictureForm();
+	PF->ShowDialog();
+}
 };
 	}
