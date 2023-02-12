@@ -399,7 +399,7 @@ namespace ReadFile1 {
 		System::Collections::Generic::List<String^>^ cmpNamelist = gcnew System::Collections::Generic::List<String^>;
 		System::Collections::Generic::List<String^>^ cmpX = gcnew System::Collections::Generic::List<String^>;
 
-		System::Text::RegularExpressions::Regex^ regex1 = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
+		System::Text::RegularExpressions::Regex^ regex1 = gcnew System::Text::RegularExpressions::Regex(" [A-Z][0-9]{2}[)] ");
 		//“úŽž‚ð”»’è
 		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+ [0-9:]{8}");
 		//“ú•t‚ð”»’è
