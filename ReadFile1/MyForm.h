@@ -399,7 +399,7 @@ namespace ReadFile1 {
 		System::Collections::Generic::List<String^>^ cmpNamelist = gcnew System::Collections::Generic::List<String^>;
 		System::Collections::Generic::List<String^>^ cmpX = gcnew System::Collections::Generic::List<String^>;
 
-		//System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
+		System::Text::RegularExpressions::Regex^ regex1 = gcnew System::Text::RegularExpressions::Regex("[A-Z][0-9]{2}[)] ");
 		//“úŽž‚ð”»’è
 		System::Text::RegularExpressions::Regex^ regex = gcnew System::Text::RegularExpressions::Regex("[0-9]{4}[/][0-9]+[/][0-9]+ [0-9:]{8}");
 		//“ú•t‚ð”»’è
@@ -426,6 +426,12 @@ namespace ReadFile1 {
 				if (match2->Success) {
 					//MessageBox::Show("Šg’£Žq:"+line);
 					MessageBox::Show("Šg’£Žq"+match2->Groups["extension"]->Value->ToString());
+				}
+
+				Match^ match3 = regex1->Match(line);
+				if (match3->Success) {
+					//MessageBox::Show("Šg’£Žq:"+line);
+					MessageBox::Show("J26" + match3->Value->ToString());
 				}
 
 				cli::array<String^>^ linelist = line->Split('"');
