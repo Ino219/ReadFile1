@@ -566,28 +566,48 @@ namespace ReadFile1 {
 	}
 	private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
 		String^ path = "C:\\Users\\chach\\Desktop\\py.zip";
-		ZipArchive^ za = ZipFile::OpenRead(path);
+		cli::array<String^>^ pathList = path->Split('\\');
+		String^ lastPath = pathList[pathList->Length - 1];
+		String^ lastPath2 = lastPath->Replace(".zip", "");
+		String^ dirPath = path->Replace(lastPath, lastPath2);
+		try {
+			ZipFile::ExtractToDirectory(path, dirPath);
+		}
+		catch (IOException^ e) {
+			//既にフォルダが存在する場合の処理
+			Directory::Delete(dirPath,true);
+			ZipFile::ExtractToDirectory(path, dirPath);
+		}
+
+		/*ZipArchive^ za = ZipFile::OpenRead(path);
 		for each (ZipArchiveEntry^ val in za->Entries)
 		{
 			MessageBox::Show(val->FullName);
-		}
+		}*/
 	}
 	private: static System::String^ sleep_(String^ Message) {
 		System::Threading::Thread::Sleep(300);
 		MessageBox::Show(Message+"実行中");
 		return Message;
 	}
-	private: static void SampleProc()
+	private: static System::Void SampleProc()
 		{
 			MessageBox::Show("SampleProc実行中");
 			sleep_("sleep_実行中");
 			ThreadMethod();
 		}
+			 static void SampleProc2() {
+				 ThreadMethod();
+				 return;
+	}
 
 	private: static void ThreadMethod()
 		{
 			MessageBox::Show("ThreadMethod実行中");
 		}
+	private: static int return_num(int num) {
+		return num;
+	}
 	private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
 
 		//出力先を指定
