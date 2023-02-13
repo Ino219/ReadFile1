@@ -66,6 +66,7 @@ namespace ReadFile1 {
 	private: System::Windows::Forms::Button^  button5;
 	private: System::Windows::Forms::Button^  button6;
 	private: System::Windows::Forms::Button^  button7;
+	private: System::Windows::Forms::Button^  button8;
 	protected:
 
 	private:
@@ -89,6 +90,7 @@ namespace ReadFile1 {
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -172,12 +174,23 @@ namespace ReadFile1 {
 			this->button7->UseVisualStyleBackColor = true;
 			this->button7->Click += gcnew System::EventHandler(this, &MyForm::button7_Click);
 			// 
+			// button8
+			// 
+			this->button8->Location = System::Drawing::Point(140, 152);
+			this->button8->Name = L"button8";
+			this->button8->Size = System::Drawing::Size(75, 23);
+			this->button8->TabIndex = 8;
+			this->button8->Text = L"button8";
+			this->button8->UseVisualStyleBackColor = true;
+			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
+			// 
 			// MyForm
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button8);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
@@ -662,6 +675,35 @@ namespace ReadFile1 {
 private: System::Void button7_Click(System::Object^  sender, System::EventArgs^  e) {
 	PictureForm^ PF = gcnew PictureForm();
 	PF->ShowDialog();
+}
+private: System::Void button8_Click(System::Object^  sender, System::EventArgs^  e) {
+	//エビデンス保存用ディレクトリ
+	String^ evidenceDir = "C:\\Users\\chach\\Desktop\\Evidence\\";
+	Directory::CreateDirectory(evidenceDir);
+	//定数パス
+	String^ dir = "C:\\Users\\chach\\Desktop\\";
+	//現在の作業ディレクトリを取得
+	String^ getPath = Directory::GetCurrentDirectory()+"\\";
+	//MessageBox::Show(getPath);
+	//コピー元のファイルを指定
+	String^ Paths = dir+"pptest2.pptx";
+	//コピー先のファイルを指定
+	String^ copyPath = evidenceDir + "pptest2_copy.pptx";
+	for (int i = 0; i < 5; i++) {
+		//String^ copyPath2 = dir + "pptest" + i + "_copy.pptx";
+		//既にファイルがあれば上書き
+		File::Copy(Paths, copyPath, true);
+		
+	}
+	//デフォルトで上書き可能なので対処不要
+	XmlWriter^ writer = XmlWriter::Create(dir + "sample.fppc");
+	writer->WriteStartElement("book");
+	writer->WriteElementString("item", "tesing____");
+	writer->WriteEndElement();
+
+	writer->Close();
+	//不要なファイルを削除
+	File::Delete(copyPath);
 }
 };
 	}
