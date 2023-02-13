@@ -24,6 +24,9 @@
     <ClCompile Include="PictureForm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="drawForm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -35,12 +38,18 @@
     <ClInclude Include="PictureForm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="drawForm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">
       <Filter>リソース ファイル</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="cmpForm.resx">
+      <Filter>リソース ファイル</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PictureForm.resx">
       <Filter>リソース ファイル</Filter>
     </EmbeddedResource>
   </ItemGroup>

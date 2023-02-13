@@ -136,11 +136,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmpForm.cpp" />
+    <ClCompile Include="drawForm.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="PictureForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cmpForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="drawForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyForm.h">
@@ -153,6 +157,9 @@
   <ItemGroup>
     <EmbeddedResource Include="cmpForm.resx">
       <DependentUpon>cmpForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="drawForm.resx">
+      <DependentUpon>drawForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>

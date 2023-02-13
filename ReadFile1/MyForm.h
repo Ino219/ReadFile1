@@ -1,6 +1,7 @@
 #pragma once
 #include "cmpForm.h"
 #include "PictureForm.h"
+#include "drawForm.h"
 #include <string>
 #include <regex>
 #include <msclr/marshal_cppstd.h>
@@ -67,6 +68,7 @@ namespace ReadFile1 {
 	private: System::Windows::Forms::Button^  button6;
 	private: System::Windows::Forms::Button^  button7;
 	private: System::Windows::Forms::Button^  button8;
+	private: System::Windows::Forms::Button^  button9;
 	protected:
 
 	private:
@@ -91,6 +93,7 @@ namespace ReadFile1 {
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -180,9 +183,19 @@ namespace ReadFile1 {
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(75, 23);
 			this->button8->TabIndex = 8;
-			this->button8->Text = L"button8";
+			this->button8->Text = L"ディレクトリ";
 			this->button8->UseVisualStyleBackColor = true;
 			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
+			// 
+			// button9
+			// 
+			this->button9->Location = System::Drawing::Point(140, 181);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(75, 23);
+			this->button9->TabIndex = 9;
+			this->button9->Text = L"button9";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &MyForm::button9_Click);
 			// 
 			// MyForm
 			// 
@@ -190,6 +203,7 @@ namespace ReadFile1 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button9);
 			this->Controls->Add(this->button8);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
@@ -704,6 +718,10 @@ private: System::Void button8_Click(System::Object^  sender, System::EventArgs^ 
 	writer->Close();
 	//不要なファイルを削除
 	File::Delete(copyPath);
+}
+private: System::Void button9_Click(System::Object^  sender, System::EventArgs^  e) {
+	drawForm^ DF = gcnew drawForm();
+	DF->ShowDialog();
 }
 };
 	}
