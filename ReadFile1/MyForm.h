@@ -2,6 +2,7 @@
 #include "cmpForm.h"
 #include "PictureForm.h"
 #include "drawForm.h"
+#include "testForm.h"
 #include <string>
 #include <regex>
 #include <msclr/marshal_cppstd.h>
@@ -69,6 +70,8 @@ namespace ReadFile1 {
 	private: System::Windows::Forms::Button^  button7;
 	private: System::Windows::Forms::Button^  button8;
 	private: System::Windows::Forms::Button^  button9;
+	private: System::Windows::Forms::Button^  button10;
+	private: System::Windows::Forms::Button^  button11;
 	protected:
 
 	private:
@@ -94,6 +97,8 @@ namespace ReadFile1 {
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
+			this->button10 = (gcnew System::Windows::Forms::Button());
+			this->button11 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -197,12 +202,34 @@ namespace ReadFile1 {
 			this->button9->UseVisualStyleBackColor = true;
 			this->button9->Click += gcnew System::EventHandler(this, &MyForm::button9_Click);
 			// 
+			// button10
+			// 
+			this->button10->Location = System::Drawing::Point(140, 210);
+			this->button10->Name = L"button10";
+			this->button10->Size = System::Drawing::Size(75, 23);
+			this->button10->TabIndex = 10;
+			this->button10->Text = L"button10";
+			this->button10->UseVisualStyleBackColor = true;
+			this->button10->Click += gcnew System::EventHandler(this, &MyForm::button10_Click);
+			// 
+			// button11
+			// 
+			this->button11->Location = System::Drawing::Point(32, 240);
+			this->button11->Name = L"button11";
+			this->button11->Size = System::Drawing::Size(75, 23);
+			this->button11->TabIndex = 11;
+			this->button11->Text = L"スクリーンショット";
+			this->button11->UseVisualStyleBackColor = true;
+			this->button11->Click += gcnew System::EventHandler(this, &MyForm::button11_Click);
+			// 
 			// MyForm
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(284, 261);
+			this->ClientSize = System::Drawing::Size(284, 289);
+			this->Controls->Add(this->button11);
+			this->Controls->Add(this->button10);
 			this->Controls->Add(this->button9);
 			this->Controls->Add(this->button8);
 			this->Controls->Add(this->button7);
@@ -279,7 +306,7 @@ namespace ReadFile1 {
 
 				Microsoft::Office::Interop::Excel::Range^ samcell = (Microsoft::Office::Interop::Excel::Range^)worksheet->Cells[2, 2];
 				//Findという検索メソッドを使用
-				/*samRange = workcells->Find(
+				samRange = workcells->Find(
 					pad,
 					Type::Missing,
 					Microsoft::Office::Interop::Excel::XlFindLookIn::xlValues,
@@ -347,7 +374,7 @@ namespace ReadFile1 {
 						}
 					} while (true);
 
-				}*/
+				}
 				while (true) {
 					//処理を記述
 					Microsoft::Office::Interop::Excel::WorksheetFunction^ works = app_->WorksheetFunction;
@@ -526,20 +553,27 @@ namespace ReadFile1 {
 		String^ path2 = "C:\\Users\\chach\\Desktop\\pptest2";
 		String^ picturePath = "C:\\Users\\chach\\Desktop\\56.jpg";
 		String^ picturePath1 = "C:\\Users\\chach\\Desktop\\msd.png";
+
+		//System::Reflection::Assembly^ a = GetType()->Assembly;
+		//System::Resources::ResourceManager^ r = gcnew System::Resources::ResourceManager(String::Format(L"{0}.ppttmp", a->GetName()->Name), a);
+
+
 		int slide_Index = 1;
 		int shapesIndex = 1;
 		Microsoft::Office::Interop::PowerPoint::Application^ apt = gcnew Microsoft::Office::Interop::PowerPoint::ApplicationClass();
 		Microsoft::Office::Interop::PowerPoint::Presentations^ presen = apt->Presentations;
 		//プレゼンテーション新規作成
 		Microsoft::Office::Interop::PowerPoint::Presentation^ presense1 = presen->Add(MsoTriState::msoFalse);
+		//Microsoft::Office::Interop::PowerPoint::Presentation^ presense1 = static_cast<Microsoft::Office::Interop::PowerPoint::Presentation^>(r->GetObject(L"templete_sample"));
+
 		//スライド追加
 		presense1->Slides->Add(slide_Index, Microsoft::Office::Interop::PowerPoint::PpSlideLayout::ppLayoutBlank);
 		//画像追加1
-		Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense1->Slides[slide_Index]->Shapes->AddPicture(picturePath, MsoTriState::msoFalse, MsoTriState::msoTrue, 100, 100, 500, 500);
-		shape->Name = "gazou1";
+		//Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense1->Slides[slide_Index]->Shapes->AddPicture(picturePath, MsoTriState::msoFalse, MsoTriState::msoTrue, 100, 100, 500, 500);
+		//shape->Name = "gazou1";
 		//画像追加2
-		Microsoft::Office::Interop::PowerPoint::Shape^ shape1 = presense1->Slides[slide_Index]->Shapes->AddPicture(picturePath1, MsoTriState::msoFalse, MsoTriState::msoTrue, 600, 100, 500, 500);
-		shape1->Name = "gazou2";
+		//Microsoft::Office::Interop::PowerPoint::Shape^ shape1 = presense1->Slides[slide_Index]->Shapes->AddPicture(picturePath1, MsoTriState::msoFalse, MsoTriState::msoTrue, 600, 100, 500, 500);
+		//shape1->Name = "gazou2";
 		//セーブ
 		presense1->SaveAs(path2, Microsoft::Office::Interop::PowerPoint::PpSaveAsFileType::ppSaveAsDefault, MsoTriState::msoTrue);
 		//閉じる
@@ -551,10 +585,10 @@ namespace ReadFile1 {
 			MsoTriState::msoFalse,
 			MsoTriState::msoFalse,
 			MsoTriState::msoFalse
-		);
+		);*/
 		
 		
-		/*Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense->Slides[slide_Index]->Shapes[shapesIndex];
+		Microsoft::Office::Interop::PowerPoint::Shape^ shape = presense1->Slides[slide_Index]->Shapes[shapesIndex];
 
 		if (shape->TextFrame->HasText == MsoTriState::msoTrue) {
 			MessageBox::Show(shape->TextFrame->TextRange->Text);
@@ -566,16 +600,17 @@ namespace ReadFile1 {
 		//取得した図形がテーブルであれば処理をする
 		if (shape->HasTable == MsoTriState::msoTrue) {
 			String^ text = shape->Table->Cell(1, 1)->Shape->TextFrame->TextRange->Text;
+			
 			MessageBox::Show(text);
 		}
-		//presense1->Save();
+		presense1->Save();
 			try {
-				presense->Close();
+				presense1->Close();
 				
 			}
 			catch (Exception^ e) {
 				MessageBox::Show(e->ToString());
-			}*/
+			}
 		
 		
 	}
@@ -722,6 +757,13 @@ private: System::Void button8_Click(System::Object^  sender, System::EventArgs^ 
 private: System::Void button9_Click(System::Object^  sender, System::EventArgs^  e) {
 	drawForm^ DF = gcnew drawForm();
 	DF->ShowDialog();
+}
+private: System::Void button10_Click(System::Object^  sender, System::EventArgs^  e) {
+	testForm^ test = gcnew testForm(1,2);
+	test->ShowDialog();
+}
+private: System::Void button11_Click(System::Object^  sender, System::EventArgs^  e) {
+	
 }
 };
 	}

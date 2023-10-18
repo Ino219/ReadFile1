@@ -8,9 +8,26 @@ System::Void ReadFile1::PictureForm::PictureForm_Load(System::Object ^ sender, S
 
 	filePath = "C:\\Users\\chach\\Desktop\\56.jpg";
 	
-	pictureBox1->Image = Image::FromFile(filePath);
-	bitmap = gcnew Bitmap(pictureBox1->Image,pictureBox1->Width,pictureBox1->Height);
+	//pictureBox1->Image = Image::FromFile(filePath);
+	//bitmap = gcnew Bitmap(pictureBox1->Image,pictureBox1->Width,pictureBox1->Height);
+
+
+	bitmap = gcnew Bitmap(pictureBox1->Width, pictureBox1->Height);
 	pictureBox1->Image = bitmap;
+
+	//Bitmap^ bmp = gcnew Bitmap(Screen::PrimaryScreen->Bounds.Width,Screen::PrimaryScreen->Bounds.Height);
+	//pictureBox1->Image = bmp;
+	//Graphicsの作成
+	Graphics^ g = Graphics::FromImage(pictureBox1->Image);
+	//画面全体をコピーする
+	//g->CopyFromScreen(0, 0,0,0,((System::Drawing::Size) bmp->Size));
+	//g->CopyFromScreen(0, 0, 0, 0, ((System::Drawing::Size) bitmap->Size));
+	g->CopyFromScreen(0, 0, 0, 0, (System::Drawing::Size(Screen::PrimaryScreen->Bounds.Width, Screen::PrimaryScreen->Bounds.Height)));
+	//解放
+	
+	//g->Dispose();
+	
+	
 
 	
 	//pictureBox1->ImageLocation = filePath;

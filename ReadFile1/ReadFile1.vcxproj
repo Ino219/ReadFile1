@@ -123,6 +123,8 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -136,14 +138,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmpForm.cpp" />
+    <ClCompile Include="draw.cpp" />
     <ClCompile Include="drawForm.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="PictureForm.cpp" />
+    <ClCompile Include="testForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cmpForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="draw.h" />
     <ClInclude Include="drawForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -151,6 +156,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="PictureForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="testForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
@@ -166,6 +174,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PictureForm.resx">
       <DependentUpon>PictureForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ppttmp.resx" />
+    <EmbeddedResource Include="testForm.resx">
+      <DependentUpon>testForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +205,9 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>false</Isolated>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Desktop\templete_sample.pptx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

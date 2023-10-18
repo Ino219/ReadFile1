@@ -1,4 +1,5 @@
 #pragma once
+#include "draw.h"
 
 namespace ReadFile1 {
 
@@ -87,6 +88,27 @@ namespace ReadFile1 {
 		Graphics^ gr;
 		Pen^ pn;
 	private: System::Void drawForm_Load(System::Object^  sender, System::EventArgs^  e) {
+
+		draw^ dr = gcnew draw(gr);
+		System::Drawing::Point^ pt = gcnew System::Drawing::Point(100, 100);
+		for (int i = 0; i < 4; i++) {
+			dr->drawLine(pt, 30, i);
+		}
+		System::Drawing::Point^ pt2 = gcnew System::Drawing::Point(80, 80);
+		dr->drawRectangle(pt2, 10, 10);
+		System::Drawing::Point^ pt3 = gcnew System::Drawing::Point(120, 80);
+		dr->drawCircle(pt3, 10);
+		System::Drawing::Point^ start = gcnew System::Drawing::Point(100, 100);
+		System::Drawing::Pen^ pn2 = gcnew System::Drawing::Pen(Color::Aqua);
+		System::Drawing::Pen^ pn3 = gcnew System::Drawing::Pen(Color::DarkCyan);
+		System::Drawing::Pen^ pn4 = gcnew System::Drawing::Pen(Color::LemonChiffon);
+		dr->drawDiagonalLine(pn, start, 20, 30);
+		dr->drawDiagonalLine(pn2, start, 20, 120);
+		dr->drawDiagonalLine(pn3, start, 20, 210);
+		dr->drawDiagonalLine(pn4, start, 20, 300);
+
+		dr->drawDiagonalLine(pn, pt3, 30, 180);
+
 		gr->DrawEllipse(pn, 150, 150, 60, 60);
 		//System::Drawing::Point^ pt1 = gcnew System::Drawing::Point(150,150);
 		//System::Drawing::Point^ pt2 = gcnew System::Drawing::Point(180, 150);
